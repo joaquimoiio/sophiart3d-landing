@@ -1,0 +1,439 @@
+@import "tailwindcss";
+
+/* ============================================================
+   SophiArt3D — "O ateliê mágico em 3D"
+   Paleta extraída da arte da marca (glossy toy / claymorphism)
+   ============================================================ */
+
+@theme {
+  /* Rosa chiclete */
+  --color-bubble-50: #fff1fa;
+  --color-bubble-100: #ffe1f1;
+  --color-bubble-200: #ffc6e5;
+  --color-bubble-300: #ff8ad1;
+  --color-bubble-400: #ff6ec2;
+  --color-bubble-500: #ff4fb0;
+  --color-bubble-600: #f22c9c;
+
+  /* Roxo profundo (contornos e textos) */
+  --color-grape-300: #b28ae8;
+  --color-grape-400: #8f57e0;
+  --color-grape-500: #7b3fd4;
+  --color-grape-600: #5b2a9e;
+  --color-grape-800: #3b1a6e;
+  --color-grape-900: #2a1158;
+
+  /* Ciano / azul-bebê */
+  --color-sky-300: #7ee9ff;
+  --color-sky-400: #5ce1ff;
+  --color-sky-500: #2ac7f0;
+
+  /* Pêssego & amarelo-robô */
+  --color-peach-400: #ffb347;
+  --color-peach-500: #ff9a2e;
+  --color-lemon-400: #ffc93c;
+  --color-lemon-500: #ffb800;
+
+  /* Fundos */
+  --color-lilac-50: #f6e8ff;
+  --color-cream: #fff7fb;
+
+  --font-display: var(--font-fredoka), ui-rounded, "Trebuchet MS", sans-serif;
+  --font-body: var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
+
+  --ease-spring: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-squish: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ---------- Base ---------- */
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Lenis — comportamento esperado pelo scroll suave */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--color-grape-800);
+  background: var(--color-lilac-50);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--color-bubble-300);
+  color: var(--color-grape-900);
+}
+
+/* Foco sempre visível (acessibilidade) */
+:focus-visible {
+  outline: 3px solid var(--color-grape-500);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* Scrollbar divertido */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-bubble-300) transparent;
+}
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-thumb {
+  background: linear-gradient(var(--color-bubble-300), var(--color-grape-400));
+  border-radius: 99px;
+  border: 2px solid var(--color-lilac-50);
+}
+
+/* ============================================================
+   Tipografia "sticker" (contorno grosso roxo + sombra 3D)
+   ============================================================ */
+.sticker-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 0.98;
+  letter-spacing: -0.01em;
+  text-shadow:
+    -2px -2px 0 var(--color-grape-800),
+    2px -2px 0 var(--color-grape-800),
+    -2px 2px 0 var(--color-grape-800),
+    2px 2px 0 var(--color-grape-800),
+    0 3px 0 var(--color-grape-800),
+    0 8px 22px rgba(59, 26, 110, 0.35);
+}
+
+.sticker-title.on-dark {
+  text-shadow:
+    -2px -2px 0 var(--color-bubble-500),
+    2px -2px 0 var(--color-bubble-500),
+    -2px 2px 0 var(--color-bubble-500),
+    2px 2px 0 var(--color-bubble-500),
+    0 3px 0 var(--color-bubble-600),
+    0 12px 30px rgba(255, 79, 176, 0.45);
+}
+
+/* Letra inflada "balão/gel" com contorno sticker via drop-shadow encadeado */
+.balloon {
+  font-family: var(--font-display);
+  font-weight: 700;
+  filter:
+    drop-shadow(2px 2px 0 var(--color-grape-800))
+    drop-shadow(-2px 2px 0 var(--color-grape-800))
+    drop-shadow(2px -2px 0 var(--color-grape-800))
+    drop-shadow(-2px -2px 0 var(--color-grape-800))
+    drop-shadow(0 3px 0 var(--color-grape-800))
+    drop-shadow(0 12px 18px rgba(59, 26, 110, 0.32));
+}
+
+/* Texto com brilho de balão (gradiente + gloss) */
+.gloss {
+  background: linear-gradient(160deg, #fff 0%, var(--gloss-a, #ff8ad1) 22%, var(--gloss-b, #ff4fb0) 62%, var(--gloss-c, #f22c9c) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  position: relative;
+}
+
+/* Palavra em destaque dentro de títulos .sticker-title.
+   O text-shadow do sticker-title não renderiza junto com background-clip:text
+   (a palavra virava um blob sem contorno). Aqui o contorno vem de drop-shadow,
+   igual ao logo balão, então a letra fica legível e com o mesmo estilo. */
+.gloss-accent {
+  background: linear-gradient(160deg, var(--gloss-a) 0%, var(--gloss-b) 52%, var(--gloss-c) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: none;
+  filter:
+    drop-shadow(2px 2px 0 #fff)
+    drop-shadow(-2px 2px 0 #fff)
+    drop-shadow(2px -2px 0 #fff)
+    drop-shadow(-2px -2px 0 #fff)
+    drop-shadow(0 3px 0 var(--color-grape-800))
+    drop-shadow(0 10px 18px rgba(59, 26, 110, 0.4));
+}
+
+/* ---------- Botão "massinha" (button-in-button) ---------- */
+.btn-mash {
+  position: relative;
+  border-radius: 999px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  transition: transform 0.5s var(--ease-squish), box-shadow 0.5s var(--ease-spring), filter 0.3s var(--ease-spring);
+  transform: translateZ(0);
+}
+.btn-mash:hover {
+  transform: translateY(-3px);
+}
+.btn-mash:active {
+  transform: translateY(1px) scale(0.97);
+}
+.btn-mash .btn-icon {
+  transition: transform 0.5s var(--ease-squish), background-color 0.4s var(--ease-spring);
+}
+.btn-mash:hover .btn-icon {
+  transform: translateX(3px) translateY(-2px) scale(1.08) rotate(8deg);
+}
+
+/* Badge / eyebrow pill */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 999px;
+  padding: 0.45rem 0.95rem;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  border: 2px solid var(--color-grape-800);
+  background: #fff;
+  color: var(--color-grape-800);
+}
+
+/* Cartão "adesivo": branco, contorno roxo grosso e sombra dura (como a logo) */
+.bezel,
+.card-toy {
+  border-radius: 2rem;
+  background: #fff;
+  border: 3px solid var(--color-grape-800);
+  box-shadow: 0 8px 0 var(--color-grape-800);
+}
+.bezel-inner {
+  border-radius: calc(2rem - 3px);
+  overflow: hidden;
+}
+
+/* ============================================================
+   Animações
+   ============================================================ */
+@keyframes float-slow {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  50% { transform: translate3d(0, -18px, 0) rotate(2deg); }
+}
+@keyframes float-med {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(-2deg); }
+  50% { transform: translate3d(0, -26px, 0) rotate(3deg); }
+}
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
+}
+@keyframes spin-rev {
+  to { transform: rotate(-360deg); }
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes marquee-rev {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
+}
+@keyframes pulse-ring {
+  0% { transform: scale(0.9); opacity: 0.7; }
+  70% { transform: scale(1.7); opacity: 0; }
+  100% { opacity: 0; }
+}
+@keyframes sparkle {
+  0%, 100% { transform: scale(0.7) rotate(0deg); opacity: 0.4; }
+  50% { transform: scale(1.15) rotate(45deg); opacity: 1; }
+}
+@keyframes blink {
+  0%, 92%, 100% { transform: scaleY(1); }
+  96% { transform: scaleY(0.08); }
+}
+@keyframes wave-hand {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(18deg); }
+  75% { transform: rotate(-14deg); }
+}
+@keyframes scroll-nudge {
+  0%, 100% { transform: translateY(0); opacity: 0.55; }
+  50% { transform: translateY(12px); opacity: 1; }
+}
+@keyframes gradient-drift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.anim-float-slow { animation: float-slow 9s ease-in-out infinite; }
+.anim-float-med { animation: float-med 7s ease-in-out infinite; }
+.anim-bob { animation: bob 3.2s ease-in-out infinite; }
+.anim-spin-slow { animation: spin-slow 26s linear infinite; }
+.anim-spin-rev { animation: spin-rev 34s linear infinite; }
+.anim-sparkle { animation: sparkle 3.4s ease-in-out infinite; }
+.anim-blink { animation: blink 5.2s ease-in-out infinite; transform-origin: center; }
+.anim-wave { animation: wave-hand 2.4s ease-in-out infinite; transform-origin: 70% 80%; }
+.anim-nudge { animation: scroll-nudge 1.9s var(--ease-spring) infinite; }
+
+/* Confete / partículas */
+.confetti-bit {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  will-change: transform, opacity;
+  z-index: 60;
+}
+
+/* Cursor customizado (desktop) */
+.custom-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 90;
+  transform: translate3d(-100px, -100px, 0);
+  will-change: transform;
+}
+.custom-cursor .dot {
+  transform: translate(-50%, -50%) scale(1);
+  transition: transform 0.4s var(--ease-squish), background 0.3s;
+}
+.custom-cursor.is-big .dot {
+  transform: translate(-50%, -50%) scale(2.1);
+}
+
+/* Fundos chapados */
+.cotton-bg {
+  background: #cdb2f7;
+}
+.dark-world {
+  background: var(--color-grape-900);
+}
+
+/* Bolinhas de fundo (padrão sutil, estilo papel de presente) */
+.dots {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.35) 2px, transparent 2.5px);
+  background-size: 34px 34px;
+}
+
+/* Entrada "pop" dos brinquedos */
+@keyframes pop-in {
+  0% { transform: scale(0) rotate(-18deg); opacity: 0; }
+  70% { transform: scale(1.12) rotate(4deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+.anim-pop {
+  animation: pop-in 0.9s var(--ease-squish) both;
+}
+
+/* Polvo nadando: sobe esticando, desce achatando */
+@keyframes swim {
+  0%, 100% { transform: translateY(0) rotate(-2deg) scale(1, 1); }
+  30% { transform: translateY(-5%) rotate(1.5deg) scale(0.975, 1.035); }
+  62% { transform: translateY(1.5%) rotate(2.5deg) scale(1.03, 0.97); }
+}
+.anim-swim {
+  animation: swim 3.8s ease-in-out infinite;
+  transform-origin: 50% 85%;
+}
+
+/* Bolha ao redor do polvo: sobe, balança e "respira" */
+@keyframes bubble-bob {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(7%, -18%) scale(1.06, 0.96); }
+  50% { transform: translate(-4%, -34%) scale(0.96, 1.06); }
+  75% { transform: translate(-8%, -14%) scale(1.04, 0.98); }
+}
+.anim-bubble {
+  animation: bubble-bob var(--bubble-dur, 4.5s) ease-in-out var(--bubble-delay, 0s) infinite;
+}
+
+/* Bolha que atravessa a tela de baixo para cima */
+@keyframes bubble-rise {
+  0% { transform: translate(0, 0) scale(0.5); opacity: 0; }
+  8% { opacity: 0.9; }
+  35% { transform: translate(22px, -40vh) scale(0.85); }
+  70% { transform: translate(-16px, -82vh) scale(1); opacity: 0.9; }
+  100% { transform: translate(12px, -125vh) scale(1.1); opacity: 0; }
+}
+.anim-rise {
+  animation: bubble-rise var(--bubble-dur, 11s) linear var(--bubble-delay, 0s) infinite both;
+}
+
+/* Palavra gigante de fundo */
+.giant-word {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 0.8;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  user-select: none;
+}
+
+/* Marquee */
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee var(--marquee-dur, 32s) linear infinite;
+}
+.marquee-track.rev {
+  animation-name: marquee-rev;
+}
+.marquee-mask {
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.marquee-mask:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+/* Scroll horizontal (vitrine) */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Input "massinha" */
+.mash-input {
+  border-radius: 1.15rem;
+  border: 2px solid rgba(123, 63, 212, 0.18);
+  background: rgba(255, 255, 255, 0.9);
+  padding: 0.95rem 1.15rem;
+  font-weight: 700;
+  color: var(--color-grape-800);
+  transition: border-color 0.35s var(--ease-spring), box-shadow 0.35s var(--ease-spring), transform 0.35s var(--ease-spring);
+}
+.mash-input::placeholder { color: #b69fd6; }
+.mash-input:focus {
+  outline: none;
+  border-color: var(--color-bubble-400);
+  box-shadow: 0 10px 30px -12px rgba(255, 79, 176, 0.55);
+  transform: translateY(-2px);
+}
+
+/* ============================================================
+   Acessibilidade — prefers-reduced-motion
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
